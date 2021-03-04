@@ -16,48 +16,54 @@ import firebase from "firebase/app"
 function Main() {
 
 
-// import ChatScreen from "./ChatScreen"
-
-const [state , setstate] = useState({
+    const [state , setstate] = useState({
     email: [],
     chats :[]
-})
-const [selectedChat , setSelectedChat] = useState(null)
+    })
+    const [selectedChat , setSelectedChat] = useState(null)
 
-let history = useHistory()
+    
 
-const database = firebaseApp.firestore()
+    let history = useHistory()
+
+    const database = firebaseApp.firestore()
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged( _user =>{
-            if (!_user){
-                history.push("/login")
-            }
-            else{
-        database
-        .collection("chats")
-        .where("users" ,"array-contains" , _user.email)
-        .onSnapshot(async snaps => {
-         const message = snaps.docs.map (docs => docs.data())  
-         console.log(message)
-         setstate({
-                email: _user.email,
-                chats: message
-            })
-          
-         })  
-         console.log(Date.now())
-            }
-        })
+      firebase.auth().onAuthStateChanged( _user =>{
+      if (!_user){
+          history.push("/login")
+      }
+      else{
+      database
+      .collection("chats")
+      .where("users" ,"array-contains" , _user.email)
+      .onSnapshot(async snaps => {
+      const message = snaps.docs.map (docs => docs.data())  
+      console.log(message)
+      setstate({
+          email: _user.email,
+          chats: message
+      })
 
-          }, [])
-console.log(state.chats)
+      })  
+      console.log(Date.now())
+      }
+      })
 
-const selectChat = (chatIndex) => {
-  console.log(chatIndex)
-    setSelectedChat(chatIndex)
-}
-  
+    }, [])
+
+    const buildDocKey = (friend) =>[state.email , friend].sort().join(":")
+
+
+    const selectChat = (chatIndex) => {
+      console.log(chatIndex)
+      setSelectedChat(chatIndex)
+    }
+
+    // const newChatBtnClicked = () => {
+    //   setnewChatFormVisible(true) 
+    // };
+
   return (
     <div className="App">
      <Router>  
@@ -65,16 +71,22 @@ const selectChat = (chatIndex) => {
         <Route path="/chat/:person">
           <Header backbutton ="/chat"/>
           <ChatScreen 
+          text ={state.chats}
           chat = {state.chats[selectedChat]}
           email ={state.email}
+          buildDocKey = {buildDocKey}
+          
           />
         </Route>
          <Route path="/chat">
           <Header backbutton ="/"/>
           <Chat 
           infos = {state}
+          chat = {state.chats[selectedChat]}
           selectChatFn={selectChat} 
           selectedChatIndex={selectedChat}
+          // newchatvisible = {newChatFormVisible}
+          // newChatBtnFn = {newChatBtnClicked}
           />
          </Route>
          <Route path="/profile">

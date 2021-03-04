@@ -2,22 +2,18 @@ import React,{useState, useRef} from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import '../Style/chatscreen.css'
 import firebase from "firebase/app"
-import firebaseApp from '../firebase'
-import {useCollectionData} from "react-firebase-hooks/firestore"
 import { TextField } from '@material-ui/core'
 import { Send } from '@material-ui/icons'
 
 
 
 
-function ChatScreen({chat,email}) {
+function ChatScreen({chat,email,buildDocKey,text}) {
     const dummy = useRef()
 
     const [input, setInput] =useState('')
+ 
 
-
-const auth =firebaseApp.auth();
-const firestore = firebaseApp.firestore()
 
 
     const userTyping = (e) => {
@@ -31,12 +27,23 @@ const firestore = firebaseApp.firestore()
    const messageValid = (txt) =>{
      return  txt && txt.replace(/\s/g,"").length
    } 
+const clickedwherenotsender = (chatIndex) => text[chatIndex].messages[text[chatIndex].messages.length - 1].sender !== email;
+console.log(chat)
+const messageRead = (index) => {
+ const dockey = buildDocKey(chat.users.filter(usr => usr !== email))
+  if (clickedwherenotsender(index)){
+    firebase
+    .firestore()
+    .collection("chats")
+    .doc(dockey)
+    .update({receiverHasRead : true})
+  }else{
+    console.log("clicked")
+  }
+}
 
- const userClickedInput = () => console.log("clicked input")
 
- const buildDocKey = ( friend) =>{
-     return [email , friend].sort().join(":")
- }
+ const userClickedInput = () => messageRead(chat)
  
    const handlesend = () =>{
        
@@ -44,7 +51,8 @@ const firestore = firebaseApp.firestore()
       
    
         if (messageValid(input)) {
-       firestore
+        firebase     
+       .firestore()
        .collection("chats")
        .doc(docKey)
        .update({
