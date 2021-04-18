@@ -2,19 +2,37 @@ import React,{useState, useRef} from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import '../Style/chatscreen.css'
 import firebase from "firebase/app"
-import { TextField } from '@material-ui/core'
+import emoji from "./download.png"
 import { Send } from '@material-ui/icons'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 
 
 
-function ChatScreen({chat,email,buildDocKey,text}) {
+function ChatScreen({Selectedchat,email,buildDocKey,textmessages,selectChatFn}) {
     const dummy = useRef()
 
     const [input, setInput] =useState('')
+    const [emojiPickerState, SetEmojiPicker] = useState(false);
  
 
 
+    let emojiPicker;
+  if (emojiPickerState) {
+    emojiPicker = (
+      <Picker
+        title="Pick your emoji…"
+        emoji="point_up"
+        onSelect = {emoji => setInput(input + emoji.native)} 
+      />
+    );
+  }
+
+  function triggerPicker(event) {
+    event.preventDefault();
+    SetEmojiPicker(!emojiPickerState);
+  }
 
     const userTyping = (e) => {
        if (e.keyCode === 13) {
@@ -27,10 +45,13 @@ function ChatScreen({chat,email,buildDocKey,text}) {
    const messageValid = (txt) =>{
      return  txt && txt.replace(/\s/g,"").length
    } 
-const clickedwherenotsender = (chatIndex) => text[chatIndex].messages[text[chatIndex].messages.length - 1].sender !== email;
-console.log(chat)
+
+
+const clickedwherenotsender = (chatIndex) => textmessages[chatIndex].messages[textmessages[chatIndex].messages.length - 1].sender !== email;
+
+
 const messageRead = (index) => {
- const dockey = buildDocKey(chat.users.filter(usr => usr !== email))
+ const dockey = buildDocKey(Selectedchat.users.filter(usr => usr !== email))
   if (clickedwherenotsender(index)){
     firebase
     .firestore()
@@ -42,12 +63,23 @@ const messageRead = (index) => {
   }
 }
 
+const AdmitFriend = () => {
+    const dockey = buildDocKey(Selectedchat.users.filter(usr => usr !== email))
+       firebase
+       .firestore()
+       .collection("chats")
+       .doc(dockey)
+       .update({Friend : true})
+   }
 
- const userClickedInput = () => messageRead(chat)
+
+ const userClickedInput = () => messageRead(selectChatFn)
+
+ const FriendAdmitted = () => AdmitFriend()
  
    const handlesend = () =>{
        
-       const docKey = buildDocKey(chat.users.filter(usr => usr !== email))
+       const docKey = buildDocKey(Selectedchat.users.filter(usr => usr !== email))
       
    
         if (messageValid(input)) {
@@ -64,7 +96,7 @@ const messageRead = (index) => {
            receiverHasRead :false
        })
 
-        document.getElementById("chattextbox").value = ""
+         setInput("")
         }
 
 
@@ -72,14 +104,23 @@ const messageRead = (index) => {
 
        dummy.current.scrollIntoView({behaviour : "smooth"})
    }
-    
-    
-    
+
+  
+   const userisSender = (chat) => chat.messages[chat.messages.length - 1].sender === email
+
+//   const addEmoji = (e) => {
+//     let emoji = e.native;
+//     console.log(e.native += input)
+//     // setInput(e.target.value += emoji)
+//     setInput(input + emoji)
+//   };
+  
+
     return(
         <div className="chatscreen">
         <p className="chatscreen_timestamp">"You Matched With Ellen on 23/09/2020"</p>
 
-            {chat.messages.map((msg ,index)=>(      
+            {Selectedchat.messages.map((msg ,index)=>(      
                 msg.sender === email?
                 (
                 <div className="chatscreen_message" key={index}> 
@@ -91,7 +132,7 @@ const messageRead = (index) => {
                ( <div className="chatscreen_message" key={index}>
                     <Avatar 
                     className='chatscreen_image'
-                    alt={chat.email}
+                    alt={Selectedchat.email}
                     src={msg.photoURL}
                     />
                 <p className="chatscreen_text">{msg.message}</p> 
@@ -114,18 +155,58 @@ const messageRead = (index) => {
              
             
         </form> */}
-            <div className='chatscreen_input'>
-              <TextField 
-              id = "chattextbox"
-              className = " chatscreen_inputfield"
-              placeholder ="Type your message"
-              onKeyUp = {(e) => userTyping(e)}
-              onFocus ={userClickedInput}></TextField>
-              <Send 
-              onClick={handlesend}
-              className = "inputbutton"
-              ></Send>
-            </div>
+           
+                {
+                        Selectedchat.Friend === false && !userisSender(Selectedchat) ?
+                        <div>
+                        <p>Do you want to let {Selectedchat.users.filter(_users => _users !== email)} message you?</p> 
+                          <button onClick ={FriendAdmitted}>Accept</button>  
+                        </div>
+                        :
+                        
+                        <div className='chatscreen_input'>
+                            {emojiPicker}
+                            <form>
+                            
+                                <input
+                                id="chattextbox"
+                                className ="chatscreen_inputfield"
+                                type="text"
+                                aria-describedby="name-desc"
+                                value={input}
+                                onChange={event => setInput(event.target.value)}
+                                placeholder ="Type your message"
+                                onKeyUp = {(e) => userTyping(e)} 
+                                onFocus ={userClickedInput}
+                                />
+                                 
+                                 <img src={emoji} alt="emoji" width="20px" heiight="20px" onClick={triggerPicker}/>
+                                 
+                                 
+                                <Send 
+                                // style = {{position:"fixed"}}
+                                onClick={handlesend}
+                                className = "inputbutton"
+                                ></Send> 
+                                
+                                
+                                </form> 
+                                 </div>
+                                /* <TextField 
+                                id = "chattextbox"
+                                className = " chatscreen_inputfield"
+                                placeholder ="Type your message"
+                                onKeyUp = {(e) => userTyping(e)} 
+                                onFocus ={userClickedInput}>
+
+                                </TextField> */
+                                
+                            
+       
+                       
+                }
+             
+          
 
             <div ref={dummy}></div>
 
