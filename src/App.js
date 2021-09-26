@@ -21,7 +21,7 @@ function App() {
     chats :[]
     })
     const [selectedChat , setSelectedChat] = useState(null)
-    const [color, changeColor] = useState('linear-gradient(89deg, #FF5EDF 0%, #04C8DE 100%)');
+    const [color] = useState('linear-gradient(89deg, #FF5EDF 0%, #04C8DE 100%)');
     
 
     let history = useHistory()
