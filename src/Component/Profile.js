@@ -1,7 +1,9 @@
 import React,{useState} from "react"
-// import { Folder } from '@material-ui/icons'
+// import firebase from "firebase/app"
 import firebaseApp from '../firebase'
 import SignOut from "./SignOut"
+import styles from "./styles"
+import {Paper, Link, InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
 
 
 const database = firebaseApp.firestore()
@@ -35,29 +37,40 @@ function Profile() {
         .catch(function(error) {
             console.error("Error writing document: ", error);
         });
- }
+    }
     
+    const classes = styles()
       
     return (
         <div>
-        <form onSubmit={onsubmit}>
-          <input
-           type = 'file'
-           onChange = {Handlechange}
-          />
-          <input
+             <main  className={classes.main}>
+            
+        <Paper elevation={9} className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Upload Image
+          </Typography>
+          <form onSubmit={onsubmit} className={classes.form}>
+            <FormControl required fullWidth margin='normal'>
+              <Input
+                type = 'file'
+                onChange = {Handlechange}
+             />
+            </FormControl>
+            <FormControl required fullWidth margin='normal'>
+              <InputLabel htmlFor='login-password-input'>Enter Your UserName</InputLabel>
+            <Input
            type = 'text'
            name='username'
            placeholder= 'Enter Name'
-          />
-          <button
-          onSubmit= {onsubmit}
-          >
-          Submit
-          </button>
-        </form>
-    
-        <SignOut/>
+             />   
+            </FormControl>
+            <Button onSubmit={onsubmit} type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>Upload</Button>
+                  
+          </form>
+        </Paper>
+            </main>
+          
+        {/* <SignOut/> */}
      </div>
         
     )

@@ -44,7 +44,6 @@ function LogIn() {
     }
     
     const classes = styles()
-    console.log(email)
     
     // const paint = (color) => {
     //     colored(color)
