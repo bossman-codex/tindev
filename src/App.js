@@ -48,6 +48,7 @@ function App() {
       }
       })
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const buildDocKey = (friend) =>[state.email , friend].sort().join(":")
@@ -58,9 +59,9 @@ function App() {
       setSelectedChat(chatIndex)
     }
 
-  const newcolor = (color) => {
-      changeColor(color)
-    }
+  // const newcolor = (color) => {
+  //     changeColor(color)
+  //   }
 
     // const newChatBtnClicked = () => {
     //   setnewChatFormVisible(true) 

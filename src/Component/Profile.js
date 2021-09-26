@@ -1,15 +1,15 @@
 import React,{useState} from "react"
 // import firebase from "firebase/app"
 import firebaseApp from '../firebase'
-import SignOut from "./SignOut"
+//import SignOut from "./SignOut"
 import styles from "./styles"
-import {Paper, Link, InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
+import {Paper, InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
 
 
 const database = firebaseApp.firestore()
 
 function Profile() {
-    const auth =firebaseApp.auth();
+    //const auth =firebaseApp.auth();
     const [fileUrl, setFileUrl]= useState({})
   
     const Handlechange = async(e) =>{

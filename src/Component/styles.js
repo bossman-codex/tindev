@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import Image from './81744.jpg'; 
+//import Image from './81744.jpg'; 
 const styles = makeStyles((theme) => ({
     main: {
       width: 'auto',

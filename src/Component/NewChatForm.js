@@ -7,9 +7,9 @@ function NewChatForm({toggle , newChatSubmitFn ,goToChatFn}) {
      
     const [username , setusername] = React.useState(null)
     const [message , setmessage] = React.useState(null)
-    const [serverError , setserverError] = React.useState("")
+    const [serverError] = React.useState("")
 
-    const handleClick =()=>toggle()
+    //const handleClick =()=>toggle()
 
     const UserTyping =  (type ,e) =>{
         switch (type) {
