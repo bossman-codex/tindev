@@ -7,6 +7,7 @@ import { InputLabel, Input, Button, FormControl, Typography } from '@material-ui
 import {Link, useHistory } from "react-router-dom"
 import '../Style/login.css'
 import google from "./Google.svg.webp"
+import background from "./81744.jpg"
 
 
 
@@ -36,6 +37,8 @@ function LogIn() {
            setPassword("")
         }
         
+  
+  
   const signinwithGoogle = () => {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
@@ -59,7 +62,17 @@ function LogIn() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   
-    const classes = styles()
+  const classes = styles()
+  
+   const style = {
+    display: "flex",
+    width: "100 %",
+    alignItems: "center",
+    justifyContent:" center",
+    height: "100vh",
+    background: `url(${background}) no-repeat fixed`,
+    backgroundSize: "cover"
+}
     
     // const paint = (color) => {
     //     colored(color)
@@ -70,7 +83,7 @@ function LogIn() {
     return (
        
 
-        <div className="body">
+        <div className="body" style={style}>
              
          <main  className={classes.main}>
             

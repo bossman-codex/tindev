@@ -4,8 +4,9 @@ import firebase from "firebase/app"
 import { useHistory } from "react-router-dom";
 import Paper from '@material-ui/core/Paper';
 import '../Style/login.css'
-import { Typography } from '@material-ui/core'
+import {InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
 import styles from "./styles"
+import background from "./81744.jpg"
 
 
 function SignUp() {
@@ -19,6 +20,16 @@ function SignUp() {
       
     const classes = styles()     
     
+    const style = {
+    display: "flex",
+    width: "100 %",
+    alignItems: "center",
+    justifyContent:" center",
+    height: "100vh",
+    background: `url(${background}) no-repeat fixed`,
+    backgroundSize: "cover"
+}
+
 
     const signup = (e) =>{
         e.preventDefault()
@@ -48,25 +59,27 @@ function SignUp() {
 
 
     return (
-        <div>
+        <div style={style}>
              <main  className={classes.main}>
         <Paper elevation={9} className={classes.paper}>
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-        <form onSubmit ={signup}>
-            <div className="emailInput">
-        <input
-         type="email"
-         name="email"
-         value={email}
-         placeholder="Enter your Email" 
-         onChange={(e)=>setemail(e.target.value) }
-        />
-        </div>
+        <form onSubmit={signup}>
+        <FormControl required fullWidth margin='normal'>
+          <InputLabel htmlFor='login-email-input'>Enter Your Email</InputLabel>
+              <Input  className="emailInput"
+                type="email"
+                name="email"
+                value={email}
+                placeholder="Enter your Email" 
+                onChange={(e)=>setemail(e.target.value) }
+                />
+        </FormControl>
 
-        <div className="psdInput">
-        <input
+        <FormControl required fullWidth margin='normal'>
+          <InputLabel htmlFor='login-email-input'>Enter Your Email</InputLabel>
+            <Input className="psdInput"
         type="password"
         name="password"
         value={password}
@@ -75,11 +88,12 @@ function SignUp() {
          minlength="6" 
          required
         />
-</div>
-        <button onClick={signup} >
-        SignUp 
-        </button>
-                    </form>
+         </FormControl>
+        <Button onClick={signup} type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
+            Sign Up 
+        </Button>
+              
+            </form>
             <Typography className={classes.errorText} component='h5' variant='h6'>
                         {/* This Email Address Already exist!! */}
                  {signError}       

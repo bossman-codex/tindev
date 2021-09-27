@@ -13,15 +13,14 @@ import firebaseApp from './firebase'
 import firebase from "firebase/app" 
 import "./App.css"
 
-function App() {
 
+function App() {
 
     const [state , setstate] = useState({
     email: [],
     chats :[]
     })
     const [selectedChat , setSelectedChat] = useState(null)
-    const [color] = useState('linear-gradient(89deg, #FF5EDF 0%, #04C8DE 100%)');
     
 
     let history = useHistory()
@@ -59,16 +58,13 @@ function App() {
       setSelectedChat(chatIndex)
     }
 
-  // const newcolor = (color) => {
-  //     changeColor(color)
-  //   }
-
+   
     // const newChatBtnClicked = () => {
     //   setnewChatFormVisible(true) 
     // };
 
   return (
-    <div style={{ backgroundColor: color }} className="App">
+    <div className="App" >
       <Router>  
        <Switch>
         <Route path="/chat/:person">
@@ -102,12 +98,10 @@ function App() {
           <Profile/>
          </Route>
          <Route path="/login">
-            <LogIn
-              
-            />
+            <LogIn/>
          </Route>  
         <Route path="/signUp">
-           <SignUp/>
+           <SignUp />
          </Route>  
          <Route path="/">
            <Header/>
