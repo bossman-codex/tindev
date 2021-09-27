@@ -7,6 +7,7 @@ import '../Style/login.css'
 import {InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
 import styles from "./styles"
 import background from "./81744.jpg"
+import google from "./Google.svg.webp"
 
 
 function SignUp() {
@@ -55,6 +56,24 @@ function SignUp() {
             });
 
     }
+    const signinwithGoogle = () => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+      // This gives you a Google Access Token.
+      var token = result.credential.accessToken;
+      console.log(token)
+      // The signed-in user info.
+      var user = result.user;
+      console.log(user)
+    })
+        firebase.auth().onAuthStateChanged( _user =>{
+      if (_user ){
+          history.push("/")
+      }
+      })
+          }
 
 
 
@@ -92,7 +111,11 @@ function SignUp() {
         <Button onClick={signup} type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
             Sign Up 
         </Button>
-              
+        <p style={{textAlign:"center" , marginBottom:"auto"}}>OR</p>
+        <Button onClick={signinwithGoogle}  fullWidth variant='contained' color='darkblue' className={classes.submit}>
+              <img src={google} alt="google" style={{width:"20px" , height:"20px" }} />
+                Sign Up With Google
+        </Button>
             </form>
             <Typography className={classes.errorText} component='h5' variant='h6'>
                         {/* This Email Address Already exist!! */}
