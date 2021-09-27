@@ -30,10 +30,10 @@ function App() {
 
     useEffect(() => {
       firebase.auth().onAuthStateChanged( _user =>{
-      if (!_user){
+      if (!_user ){
           history.push("/login")
       }
-      else{
+      else {
       database
       .collection("chats")
       .where("users" ,"array-contains" , _user.email)
@@ -44,7 +44,7 @@ function App() {
           chats: message
       })
 
-      })  
+      })
       }
       })
 

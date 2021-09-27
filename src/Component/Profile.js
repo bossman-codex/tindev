@@ -1,7 +1,7 @@
 import React,{useState} from "react"
 // import firebase from "firebase/app"
 import firebaseApp from '../firebase'
-//import SignOut from "./SignOut"
+import SignOut from "./SignOut"
 import styles from "./styles"
 import {Paper, InputLabel, Input, Button, FormControl, Typography } from '@material-ui/core'
 
@@ -70,7 +70,7 @@ function Profile() {
         </Paper>
             </main>
           
-        {/* <SignOut/> */}
+        <SignOut/>
      </div>
         
     )
