@@ -51,7 +51,8 @@ function LogIn() {
       var user = result.user;
       console.log(user)
     })
-          }
+  }
+  
   useEffect(() => {
   firebase.auth().onAuthStateChanged( _user =>{
       if (_user ){
