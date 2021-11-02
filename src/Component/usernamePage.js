@@ -89,7 +89,7 @@ function SignUp() {
 
                     // Profile updated successfully!
                     //  "NEW USER NAME"
-                      history.push("/username")
+                      history.push("/")
                       var displayName = user.displayName;
                       console.log(displayName)
                     // "https://example.com/jane-q-user/profile.jpg"
