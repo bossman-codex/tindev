@@ -23,7 +23,8 @@
     margin-left: auto;
     background-color: royalblue; 
     border-radius: 15px;
-    padding: 12px;
+    padding: 15px;
+
 }
 
 .chatscreen_input{
@@ -38,6 +39,7 @@
 .chatscreen_inputfield{
     background-color: darkgray;
     width:85vw;
+    
 }
 
 .inputbutton{
@@ -52,3 +54,20 @@
     display: flex;
     padding : 20px;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+}
+

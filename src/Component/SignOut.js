@@ -11,7 +11,8 @@ function SignOut() {
      console.log(auth)
 
      const logout = () =>{
-        firebase.auth().signOut().then(() => {
+       firebase.auth().signOut().then(() => {
+           window.localStorage.clear();
            console.log("Sign-out successful.") 
           }).catch((error) => {
             console.log(error)

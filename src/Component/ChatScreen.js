@@ -1,33 +1,126 @@
-import React,{useState, useRef} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import Avatar from '@material-ui/core/Avatar'
+import {Box , TextField} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles'
 import '../Style/chatscreen.css'
+import styles from '../Style/textbox';
 import firebase from "firebase/app"
+import firebaseApp from '../firebase'
 import emoji from "./download.png"
-import { Send } from '@material-ui/icons'
+import { Send , EmojiEmotions } from '@material-ui/icons'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
+import { useHistory } from "react-router-dom";
+
+
+
+//import { getAuth } from "firebase/auth";
 
 
 
 
-function ChatScreen({Selectedchat,email,buildDocKey,textmessages,selectChatFn}) {
+function ChatScreen({  classes }) {
+   const textmessages = JSON.parse(window.localStorage.getItem("chat"))
+   const props = JSON.parse(window.localStorage.getItem("props"))
+   const Selectedchat = textmessages[props]
+
+  
     const dummy = useRef()
 
-    const [input, setInput] =useState('')
-    const [emojiPickerState, SetEmojiPicker] = useState(false);
+  const db = firebaseApp.firestore()
+  //const Selectedchat1 = textmessages[window.localStorage.getItem("props")]
+  const [input, setInput] =useState('')
+  const [emojiPickerState, SetEmojiPicker] = useState(false);
+  const [mydataimg, Setmydataimg] = useState("")
+  const [mydata, Setmydata] = useState("")
+  const [friendDataimg, SetfriendDataimg] = useState("")
+  const [friendData, SetfriendData] = useState("")
+  const container = document.getElementById('chatview-container');
+  const friendName = (Selectedchat.users[1])
+  const email = (Selectedchat.users[0])
+   const buildDocKey = (friend) =>[email , friend].sort().join(":")
+
+  useEffect(() => {
+     
+    let docRefFriend = db.collection("users").doc(`${friendName}`);
+
+    docRefFriend.get().then((doc) => {
+      if (doc.exists) {
+       
+        SetfriendData(doc.data().Username);
+        SetfriendDataimg(doc.data().profilepic);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+
+
+    let docRefSelf = db.collection("users").doc(`${email}`);
+
+    docRefSelf.get().then((doc) => {
+      if (doc.exists) {
+
+        Setmydata(doc.data().Username);
+        Setmydataimg(doc.data().profilepic);
+
+        
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+
+   
+    if(container)
+      container.scrollTo(0, container.scrollHeight);
+    
+    
+     
+  }, [])
+
+
+
+
+
+  
  
 
 
-    let emojiPicker;
-  if (emojiPickerState) {
-    emojiPicker = (
-      <Picker
-        title="Pick your emoji…"
-        emoji="point_up"
-        onSelect = {emoji => setInput(input + emoji.native)} 
-      />
-    );
-  }
+  // ( () => {
+  // if (Selectedchat === undefined) {
+  //    return history.push("/chat")
+  //   }
+  // })()
+  
+  
+  
+ 
+const auth = firebaseApp.auth();
+const user = auth.currentUser;
+  // if (user !== null) {
+  //   // The user object has basic properties such as display name, email, etc.
+  //   const displayName = user.displayName;
+  //   const email = user.email;
+  //   const photoURL = user.photoURL;
+  //   const emailVerified = user.emailVerified;
+  
+  //   console.log(Selectedchat,displayName, email, photoURL, emailVerified)
+  // }
+  //   let emojiPicker;
+  // if (emojiPickerState) {
+  //   emojiPicker = (
+  //     <Picker
+  //       title="Pick your emoji…"
+  //       emoji="point_up"
+  //       onSelect = {emoji => setInput(input + emoji.native)} 
+  //     />
+  //   );
+  // }
 
   function triggerPicker(event) {
     event.preventDefault();
@@ -73,7 +166,7 @@ const AdmitFriend = () => {
    }
 
 
- const userClickedInput = () => messageRead(selectChatFn)
+ const userClickedInput = () => messageRead(props)
 
  const FriendAdmitted = () => AdmitFriend()
  
@@ -115,33 +208,58 @@ const AdmitFriend = () => {
 //     setInput(input + emoji)
 //   };
   
+  const myName = (Selectedchat.users[Selectedchat.users.length - 2])
+
+
+ 
+  
+    
+
 
     return(
         <div className="chatscreen">
-        <p className="chatscreen_timestamp">"You Matched With Ellen on 23/09/2020"</p>
+        
 
-            {Selectedchat.messages.map((msg ,index)=>(      
-                msg.sender === email?
-                (
-                <div className="chatscreen_message" key={index}> 
-                 <p className="chatscreen_textuser">{msg.message}</p>
-                </div> 
+        
+        <main id='chatview-container' className={classes.content} style={emojiPickerState ? {height: 'calc(100vh - 463px)',} : {height: 'calc(100vh - 107px)',}}>
+
+          <p className="chatscreen_timestamp">"You Matched With {friendName} on 23/09/2020"</p>
+        {Selectedchat?.messages.map((msg, index) => {
+    
+          return (
+             
+              msg.sender === email ?
+                (<div className="chatscreen_message " key={index}>
+                  <p className="chatscreen_textuser">{msg.message}</p>
+                
+                  <Avatar
+                    style={{ marginLeft: "10px" }}
+                    className='chatscreen_image'
+                    alt={`${mydata}`}
+                    src={mydataimg}
+                  />
+                </div>
                 
                 )
-                : 
-               ( <div className="chatscreen_message" key={index}>
-                    <Avatar 
+                :
+                (<div className="chatscreen_message" key={index}>
+                  <Avatar
+                    style={{ marginLeft: "10px" }}
                     className='chatscreen_image'
-                    alt={Selectedchat.email}
-                    src={msg.photoURL}
-                    />
-                <p className="chatscreen_text">{msg.message}</p> 
+                    alt={`${friendData}`}
+                    src={friendDataimg}
+                  />
+                  <p className="chatscreen_text">{msg.message}</p>
                 </div>
+              
                 )
-            ))
+              )
+        }  
+            )
             
             }
-        <div className="space"></div>
+            </main>
+        {/* <div className="space"></div> */}
 
         {/* <form className='chatscreen_input'>
             <input
@@ -163,14 +281,19 @@ const AdmitFriend = () => {
                           <button onClick ={FriendAdmitted}>Accept</button>  
                         </div>
                         :
-                        
-                        <div className='chatscreen_input'>
-                            {emojiPicker}
-                            <form>
-                            
-                                <input
-                                id="chattextbox"
-                                className ="chatscreen_inputfield"
+            
+              <div className={classes.chatTextBoxContainer} >
+                <Box id="textbox" className={classes.box}>        
+                  
+                          
+
+              
+              
+                 <EmojiEmotions className={classes.image} src={emoji} alt="emoji" width="20px" heiight="20px" onClick={triggerPicker}/>
+
+                                <TextField
+                                //id="chattextbox"
+                                // className={classes.chatTextBox}
                                 type="text"
                                 aria-describedby="name-desc"
                                 value={input}
@@ -178,20 +301,43 @@ const AdmitFriend = () => {
                                 placeholder ="Type your message"
                                 onKeyUp = {(e) => userTyping(e)} 
                                 onFocus ={userClickedInput}
-                                />
-                                 
-                                 <img src={emoji} alt="emoji" width="20px" heiight="20px" onClick={triggerPicker}/>
-                                 
-                                 
+                                multiline
+                                maxrows={2}
+                                 />
+     
                                 <Send 
                                 // style = {{position:"fixed"}}
                                 onClick={handlesend}
-                                className = "inputbutton"
-                                ></Send> 
-                                
-                                
-                                </form> 
-                                 </div>
+                                className = {classes.sendBtn}
+                                ></Send>   
+                               
+              </Box>
+              
+              {emojiPickerState ?
+                <div style={{maxHeight:"300px"}}>
+                {container.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"})}
+                  <Picker
+                  theme="light"  
+                  title="Pick your emoji…"
+                  emoji="point_up"
+                  onSelect={emoji => setInput(input + emoji.native)}
+                    style={{ width: "100%", position: 'absolute' , overflowY: 'hidden'}}
+                    showPreview= {false}
+                    showSkinTones={false}
+                    emojiSize={35}
+                    sheetSize={64}
+                  />
+                  </div>
+                  : null}
+           
+            </div>
+             
+              
+
+                
+            
+              
+              
                                 /* <TextField 
                                 id = "chattextbox"
                                 className = " chatscreen_inputfield"
@@ -203,19 +349,20 @@ const AdmitFriend = () => {
                                 
                             
        
-                       
-                }
+                    
+        }
+        
              
           
 
             <div ref={dummy}></div>
-
-            
+ 
         </div>
+       
     )
 }
 
 
 
 
-export default ChatScreen
+export default withStyles( styles )(ChatScreen)

@@ -37,7 +37,10 @@ function SignUp() {
         firebaseApp.auth().createUserWithEmailAndPassword(email, password)
         .then(authRes => {
             const userObj = { 
-                email : authRes.user.email
+              email: authRes.user.email,
+              Username: "",
+              profilepic: ""
+
             };
             firebase
             .firestore()
@@ -45,7 +48,7 @@ function SignUp() {
             .doc(email)
             .set(userObj)
             .then(()=>{
-               history.push("/")
+               history.push("/username")
             } , dbError =>{
                 console.log(dbError);
                 setSignerror("Failed to add user")
@@ -53,9 +56,14 @@ function SignUp() {
             }, authErr => {
                 console.log(authErr);
                 setSignerror(authErr.message)
-            });
+        });
+      
+      
 
-    }
+  }
+  
+           
+
     const signinwithGoogle = () => {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
@@ -70,7 +78,7 @@ function SignUp() {
     })
         firebase.auth().onAuthStateChanged( _user =>{
       if (_user ){
-          history.push("/")
+          history.push("/username")
       }
       })
           }
@@ -94,10 +102,11 @@ function SignUp() {
                 placeholder="Enter your Email" 
                 onChange={(e)=>setemail(e.target.value) }
                 />
-        </FormControl>
+              </FormControl>
+              
 
         <FormControl required fullWidth margin='normal'>
-          <InputLabel htmlFor='login-email-input'>Enter Your Email</InputLabel>
+          <InputLabel htmlFor='login-email-input'>Enter Your Password</InputLabel>
             <Input className="psdInput"
         type="password"
         name="password"

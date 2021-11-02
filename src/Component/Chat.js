@@ -3,14 +3,18 @@ import '../Style/chat.css'
 import Avatar from '@material-ui/core/Avatar'
 import {Link} from 'react-router-dom'
 import { ListItem, ListItemText ,ListItemAvatar, Typography , ListItemIcon, Button } from '@material-ui/core'
-import {NotificationImportant } from "@material-ui/icons"
+import { NotificationImportant } from "@material-ui/icons"
+import firebaseApp from '../firebase'
 import firebase from "firebase/app"
 import NewChatForm from "./NewChatForm"
 
 
+
 function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
 
-    const[newChatFormVisible , setnewChatFormVisible] = useState(false)
+    const [newChatFormVisible, setnewChatFormVisible] = useState(false)
+    
+     const db = firebaseApp.firestore()
   
    const buildDocKey = (friend) =>[infos.email , friend].sort().join(":")
 
@@ -59,7 +63,8 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
    }
 
     const messageRead = (index) => {
-    const dockey = buildDocKey(infos.chats[index].users.filter(_user => _user !== infos.email)[0])
+        const dockey = buildDocKey(infos.chats[index].users.filter(_user => _user !== infos.email)[0])
+       
         if(clickedwherenotsender(index)){
         firebase
         .firestore()
@@ -80,6 +85,7 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
 
     const userisSender = (chat) => chat.messages[chat.messages.length - 1].sender === infos.email
 
+
      const togglePop = () => {
       setnewChatFormVisible(!newChatFormVisible)
        };
@@ -89,6 +95,9 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
         // };
     
     const newChat = () => togglePop()
+
+
+
 
     return (
         <>
@@ -102,6 +111,24 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
         <Link to={`/chat/${infos.email}`}>
             {infos.chats.map((chats , index)=>{
                 console.log(index)
+                console.log(chats.users.filter(_users => _users !== infos.email)[0])
+
+
+                let docRef = db.collection("users").doc(`${chats.users.filter(_users => _users !== infos.email)[0]}`);
+
+                docRef.get().then((doc) => {
+                if (doc.exists) {
+                console.log("Document data:", doc.data());
+                } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                }
+                }).catch((error) => {
+                console.log("Error getting document:", error);
+                });
+
+
+
               return(
                   <ListItem 
                   onClick={() => selectChat(index)}

@@ -8,6 +8,7 @@ import ChatScreen from './Component/ChatScreen'
 import Profile from './Component/Profile'
 import LogIn from './Component/LogIn';
 import SignUp from './Component/SignUp';
+import Username from './Component/usernamePage'
 import { useHistory } from 'react-router-dom'
 import firebaseApp from './firebase'
 import firebase from "firebase/app" 
@@ -37,7 +38,8 @@ function App() {
       .collection("chats")
       .where("users" ,"array-contains" , _user.email)
       .onSnapshot(async snaps => {
-      const message = snaps.docs.map (docs => docs.data())  
+        const message = snaps.docs.map(docs => docs.data())
+        window.localStorage.setItem("chat", JSON.stringify(message))
       setstate({
           email: _user.email,
           chats: message
@@ -46,22 +48,24 @@ function App() {
       })
       }
       })
-
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const buildDocKey = (friend) =>[state.email , friend].sort().join(":")
-
-
-    const selectChat = (chatIndex) => {
-      console.log(chatIndex)
+    // const buildDocKey = (friend) =>[state.email , friend].sort().join(":")
+    //window.localStorage.setItem("buildkey" , buildDocKey())
+  
+  const selectChat = (chatIndex) => {
+    window.localStorage.setItem("props" , chatIndex)
       setSelectedChat(chatIndex)
     }
 
-   
-    // const newChatBtnClicked = () => {
-    //   setnewChatFormVisible(true) 
-    // };
+  // const SChat = chat[props]
+  // console.log(SChat)
+  // window.localStorage.setItem("selectedchat", SChat)
+  //   // const newChatBtnClicked = () => {
+  //   //   setnewChatFormVisible(true) 
+  //   // };
 
   return (
     <div className="App" >
@@ -73,13 +77,11 @@ function App() {
            menu = "/"
            />
             <ChatScreen
-          
-          textmessages ={state.chats}
-          Selectedchat = {state.chats[selectedChat]}
-          email ={state.email}
-          buildDocKey = {buildDocKey}
-          selectChatFn={selectedChat} 
-          
+              // textmessages ={state.chats}
+              //Selectedchat = {state.chats[props]}
+              // buildDocKey = {buildDocKey}
+              // selectChatFn={selectedChat} 
+              
           />
         </Route>
          <Route path="/chat">
@@ -102,6 +104,9 @@ function App() {
          </Route>  
         <Route path="/signUp">
            <SignUp />
+          </Route>
+        <Route path="/username">
+           <Username />
          </Route>  
          <Route path="/">
            <Header/>
