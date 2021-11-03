@@ -40,6 +40,7 @@ function App() {
       .onSnapshot(async snaps => {
         const message = snaps.docs.map(docs => docs.data())
         window.localStorage.setItem("chat", JSON.stringify(message))
+        window.localStorage.setItem("email", _user.email)
       setstate({
           email: _user.email,
           chats: message

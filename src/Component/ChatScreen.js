@@ -29,18 +29,24 @@ function ChatScreen({  classes }) {
 
   const db = firebaseApp.firestore()
   //const Selectedchat1 = textmessages[window.localStorage.getItem("props")]
-  const [input, setInput] =useState('')
+  const [input, setInput] = useState('')
+  const [state , setstate] = useState({
+    email: [],
+    chats :[]
+    })
   const [emojiPickerState, SetEmojiPicker] = useState(false);
   const [mydataimg, Setmydataimg] = useState("")
   const [mydata, Setmydata] = useState("")
   const [friendDataimg, SetfriendDataimg] = useState("")
   const [friendData, SetfriendData] = useState("")
+  const Selectedchat1 = state.chats[props]
   const container = document.getElementById('chatview-container');
-  const friendName = (Selectedchat.users[1])
-  const email = (Selectedchat.users[0])
-   const buildDocKey = (friend) =>[email , friend].sort().join(":")
-
+  const email = window.localStorage.getItem("email")
+  const buildDocKey = (friend) => [email, friend].sort().join(":")
+  const friendName = Selectedchat.users.filter(word => word !== `${email}` )
+console.log(friendName)
   useEffect(() => {
+
      
     let docRefFriend = db.collection("users").doc(`${friendName}`);
 
@@ -225,7 +231,7 @@ const AdmitFriend = () => {
 
           <p className="chatscreen_timestamp">"You Matched With {friendName} on 23/09/2020"</p>
         {Selectedchat?.messages.map((msg, index) => {
-    
+          
           return (
              
               msg.sender === email ?
@@ -242,7 +248,8 @@ const AdmitFriend = () => {
                 
                 )
                 :
-                (<div className="chatscreen_message" key={index}>
+              (
+                <div className="chatscreen_message" key={index}>
                   <Avatar
                     style={{ marginLeft: "10px" }}
                     className='chatscreen_image'
