@@ -229,7 +229,7 @@ const AdmitFriend = () => {
         
         <main id='chatview-container' className={classes.content} style={emojiPickerState ? {height: 'calc(100vh - 463px)',} : {height: 'calc(100vh - 107px)',}}>
 
-          <p className="chatscreen_timestamp">"You Matched With {friendName} on 23/09/2020"</p>
+          <p className="chatscreen_timestamp">You Matched With <span style={{color:"black" , fontWeight:900}}>{friendName}</span> on 23/09/2020</p>
         {Selectedchat?.messages.map((msg, index) => {
           
           return (

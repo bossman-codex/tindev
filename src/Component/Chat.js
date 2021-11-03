@@ -3,7 +3,7 @@ import '../Style/chat.css'
 import Avatar from '@material-ui/core/Avatar'
 import {Link} from 'react-router-dom'
 import { ListItem, ListItemText ,ListItemAvatar, Typography , ListItemIcon, Button } from '@material-ui/core'
-import { NotificationImportant } from "@material-ui/icons"
+import NotificationBadge from 'react-notification-badge';
 import firebaseApp from '../firebase'
 import firebase from "firebase/app"
 import NewChatForm from "./NewChatForm"
@@ -137,8 +137,24 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
                   >
                      <ListItemAvatar>
                        <Avatar alt={"anybody"}>{chats.users.filter(_users => _users !== infos.email)[0].split("")[0]}</Avatar>
-                     </ListItemAvatar>
-                     <ListItemText 
+                      </ListItemAvatar>
+                      {
+                        chats.receiverHasRead === false && !userisSender(chats) ? 
+                          <ListItemText
+                     primary={chats.users.filter(_users => _users !== infos.email)[0]}
+                     secondary={
+                         <React.Fragment>
+                             <Typography style={{ fontWeight: 900, color:"black" }} component = "span">
+                                {
+                                    chats.messages[chats.messages.length - 1].message.substring(0, 30)
+                                }
+                             </Typography>
+                         </React.Fragment>
+                     }
+                     >
+
+                              </ListItemText> :
+                        <ListItemText
                      primary={chats.users.filter(_users => _users !== infos.email)[0]}
                      secondary={
                          <React.Fragment>
@@ -152,10 +168,15 @@ function Chat({infos ,chat, selectChatFn , selectedChatIndex ,newChatBtnFn}) {
                      >
 
                      </ListItemText>
+                      }
+                      
                      {
                         chats.receiverHasRead === false && !userisSender(chats) ? 
                         <ListItemIcon>
-                            <NotificationImportant style={{color:"red"}}></NotificationImportant>
+                           <NotificationBadge
+                           count={1}>
+                                      
+                            </NotificationBadge>
                         </ListItemIcon> : null
                      }
                   </ListItem>
