@@ -20,6 +20,8 @@ const styles = theme => ({
     overflowY: 'scroll',
     top: '50px',
     width: 'calc(100%)',
+    //height: 'calc(100vh - 145px)',
+   
     // position: 'relative'
   },
   
@@ -31,17 +33,24 @@ const styles = theme => ({
     left: '15px',
     boxSizing: 'border-box',
     overflow: 'hidden',
-    width: 'calc(100%)'
+    width: 'calc(100%)',
+    height: '85px'
+    
+    
   },
   box: {
     display: "flex",
-    paddingBottom: "15px",
+    paddingTop: "15px",
     alignItems: 'flex-end'
   },
 
   chatTextBox: {
-    width: 'calc(100% - 25px)',
-
+    width: 'calc(100% - 35px)',
+    backgroundColor: 'lightgray',
+    // border: "2px soild black",
+    borderRadius: '20px',
+    // maxHeight:'calc(100vh - 463px)',
+    // overflow:"scroll"
    
   },
 

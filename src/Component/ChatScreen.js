@@ -157,9 +157,10 @@ const messageRead = (index) => {
     .collection("chats")
     .doc(dockey)
     .update({receiverHasRead : true})
-  }else{
-    console.log("clicked")
   }
+ // else {
+  //   console.log("clicked")
+  // }
 }
 
 const AdmitFriend = () => {
@@ -227,7 +228,7 @@ const AdmitFriend = () => {
         
 
         
-        <main id='chatview-container' className={classes.content} style={emojiPickerState ? {height: 'calc(100vh - 463px)',} : {height: 'calc(100vh - 107px)',}}>
+        <main id='chatview-container' className={classes.content} style={emojiPickerState ? {height: 'calc(100vh - 500px)',} : {height: 'calc(100vh - 145px)',}}>
 
           <p className="chatscreen_timestamp">You Matched With <span style={{color:"black" , fontWeight:900}}>{friendName}</span> on 23/09/2020</p>
         {Selectedchat?.messages.map((msg, index) => {
@@ -298,9 +299,9 @@ const AdmitFriend = () => {
               
                  <EmojiEmotions className={classes.image} src={emoji} alt="emoji" width="20px" heiight="20px" onClick={triggerPicker}/>
 
-                                <TextField
+                                <input
                                 //id="chattextbox"
-                                // className={classes.chatTextBox}
+                                className={classes.chatTextBox}
                                 type="text"
                                 aria-describedby="name-desc"
                                 value={input}
@@ -309,7 +310,10 @@ const AdmitFriend = () => {
                                 onKeyUp = {(e) => userTyping(e)} 
                                 onFocus ={userClickedInput}
                                 multiline
-                                maxrows={2}
+                                rowsMax="3"
+                               // InputProps={{ disableUnderline: true }}
+                                variant="filled"
+                                
                                  />
      
                                 <Send 
