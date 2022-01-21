@@ -1,6 +1,6 @@
 import React,{useState, useEffect, useRef} from 'react'
 import Avatar from '@material-ui/core/Avatar'
-import {Box , TextField} from '@material-ui/core';
+import {Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import '../Style/chatscreen.css'
 import styles from '../Style/textbox';
@@ -10,7 +10,7 @@ import emoji from "./download.png"
 import { Send , EmojiEmotions } from '@material-ui/icons'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 
 
@@ -30,16 +30,16 @@ function ChatScreen({  classes }) {
   const db = firebaseApp.firestore()
   //const Selectedchat1 = textmessages[window.localStorage.getItem("props")]
   const [input, setInput] = useState('')
-  const [state , setstate] = useState({
-    email: [],
-    chats :[]
-    })
+  // const [state ] = useState({
+  //   email: [],
+  //   chats :[]
+  //   })
   const [emojiPickerState, SetEmojiPicker] = useState(false);
   const [mydataimg, Setmydataimg] = useState("")
   const [mydata, Setmydata] = useState("")
   const [friendDataimg, SetfriendDataimg] = useState("")
   const [friendData, SetfriendData] = useState("")
-  const Selectedchat1 = state.chats[props]
+  // const Selectedchat1 = state.chats[props]
   const container = document.getElementById('chatview-container');
   const email = window.localStorage.getItem("email")
   const buildDocKey = (friend) => [email, friend].sort().join(":")
@@ -87,6 +87,7 @@ console.log(friendName)
     
     
      
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -106,8 +107,8 @@ console.log(friendName)
   
   
  
-const auth = firebaseApp.auth();
-const user = auth.currentUser;
+// const auth = firebaseApp.auth();
+// const user = auth.currentUser;
   // if (user !== null) {
   //   // The user object has basic properties such as display name, email, etc.
   //   const displayName = user.displayName;
@@ -215,7 +216,7 @@ const AdmitFriend = () => {
 //     setInput(input + emoji)
 //   };
   
-  const myName = (Selectedchat.users[Selectedchat.users.length - 2])
+  // const myName = (Selectedchat.users[Selectedchat.users.length - 2])
 
 
  

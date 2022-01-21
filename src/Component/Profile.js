@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useHistory ,Link} from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 // import firebase from "firebase/app"
 import firebaseApp from '../firebase'
 import SignOut from "./SignOut"
@@ -10,7 +10,7 @@ import {Paper, InputLabel, Input, Button, FormControl, Typography } from '@mater
 const database = firebaseApp.firestore()
 
 function Profile() {
-    let history = useHistory();
+    // let history = useHistory();
     const [fileUrl, setFileUrl]= useState({})
   
     const Handlechange = async(e) =>{
@@ -72,9 +72,9 @@ function Profile() {
             </main>
           
         <SignOut />
-        <Link to={"/username"}>
+        {/* <Link to={"/username"}>
           Change Username and Profile Picture
-        </Link>
+        </Link> */}
      </div>
         
     )
